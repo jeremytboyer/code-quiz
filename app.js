@@ -65,7 +65,7 @@ function showCurrentQuestion() {
 function endGame() {
   if (currentQuestionIndex == questionData.length) {
     h2.innerHTML = "Congrats";
-    questionDiv.innerHTML = `<p>Congrats! You got ${wrongQuestions.length} out of 10 wrong<br>Here's what you may need to brush up on:</p>`;
+    questionDiv.innerHTML = `<p>You got ${wrongQuestions.length} out of 10 wrong<br>Here's what you may need to brush up on:</p>`;
     wrongQuestions.forEach((question) => {
       var p = document.createElement("p");
       questionDiv.append(p);
@@ -112,6 +112,12 @@ function startClock() {
   }, 1000);
 }
 
+function startGame() {
+  startBtn.classList.add("hide");
+  showCurrentQuestion();
+  startClock();
+}
+
 function getUserData() {
   var rawData = localStorage.getItem("users");
   var parsed = JSON.parse(rawData) || [];
@@ -129,11 +135,6 @@ function clearData() {
   input.value = "";
 }
 
-function startGame() {
-  startBtn.classList.add("hide");
-  showCurrentQuestion();
-  startClock();
-}
 
 startBtn.addEventListener("click", startGame);
 

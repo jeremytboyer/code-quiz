@@ -40,9 +40,15 @@ h2 {
 button {
   font-size: 1.5rem;
   padding: 1.1rem;
-  margin-bottom: 10%;
+  margin-bottom: 15px;
   background-color: aquamarine;
   border: none;
+}
+
+.questiondiv button:hover {
+  background-color: aqua;
+  scale: 1.1;
+  cursor: pointer;
 }
 
 div {
