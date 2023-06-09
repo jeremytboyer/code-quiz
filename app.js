@@ -87,19 +87,14 @@ function endGame() {
     }
     submitBtn.addEventListener("click", submit);
 
-    function restartGame() {
-      location.reload();
-      // currentQuestionIndex = 0;
-      // time = 90;
-      // showSubmitBtn.classList.toggle("hide");
-      // restartBtn.classList.toggle("hide");
-      // wrongQuestions = [];
-      // warningDiv.innerHTML = ''
-      // startGame();
-    }
-    restartBtn.addEventListener("click", restartGame);
+    
   }
 }
+
+function restartGame() {
+  location.reload();
+}
+restartBtn.addEventListener("click", restartGame);
 
 function startClock() {
   var clock = setInterval(function () {
