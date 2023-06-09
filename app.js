@@ -37,8 +37,9 @@ function showCurrentQuestion() {
     if (e.target.innerText !== questionData[currentQuestionIndex].answer) {
       wrongQuestions.push(questionData[currentQuestionIndex].question);
       time -= 10;
-      var warning = document.createElement("h4");
-      h3.append(warning);
+      var warningDiv = document.querySelector(".warning");
+      var warning = document.createElement("h3");
+      warningDiv.append(warning);
       warning.innerText = "";
       warning.style.color = "red";
       warningInt = 0;
@@ -48,7 +49,7 @@ function showCurrentQuestion() {
         if (warningInt === 1) {
           clearInterval(warningTimer);
           warning.remove();
-          warning.innerText = "";
+          warningDiv.innerText = "";
         }
       }, 1000);
     }
@@ -83,32 +84,18 @@ function endGame() {
 
       saveUserData(playerArray);
       clearData();
-      //  newScore = document.createElement('p')
-      //  var val = input.value;
-      //  var scoresP = document.querySelectorAll('.scores p');
-
-      //  for (var i = 0; i < scoresP.length; i++) {
-      //    var scoreParagraph = scoresP[i];
-      //    //  John - Score: 5
-      //    var name = scoreParagraph.innerText.split('-')[0].trim().toLowerCase();
-      //    if (name === val.toLowerCase()) {
-      //      scoreParagraph.remove();
-      //    }
-      //  }
-      //   scores.append(newScore)
-      //   val.innerText = ''
-      //   newScore.innerHTML = `${input.value} - Score: ${10 - wrongQuestions.length}0%`
     }
     submitBtn.addEventListener("click", submit);
 
     function restartGame() {
-      currentQuestionIndex = 0;
-      time = 90;
-      startGame();
-      showSubmitBtn.classList.toggle("hide");
-      restartBtn.classList.toggle("hide");
-      wrongQuestions = [];
-      warning.remove();
+      location.reload();
+      // currentQuestionIndex = 0;
+      // time = 90;
+      // showSubmitBtn.classList.toggle("hide");
+      // restartBtn.classList.toggle("hide");
+      // wrongQuestions = [];
+      // warningDiv.innerHTML = ''
+      // startGame();
     }
     restartBtn.addEventListener("click", restartGame);
   }
