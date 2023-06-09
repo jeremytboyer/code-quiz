@@ -1,22 +1,33 @@
 var startBtn = document.querySelector("#start-btn");
 var currentQuestionIndex = 0;
 var wrongQuestions = [];
-var div = document.querySelector("div");
+var questionDiv = document.querySelector(".questiondiv");
 var h2 = document.querySelector("h2");
-
+var timer = document.querySelector(".timerEl");
+var time = 90;
+var h3 = document.querySelector("h3");
+var highScores = document.querySelector(".highscore");
+var overlay = document.querySelector("#overlay");
+var returnBtn = document.querySelector(".return");
+var showSubmitBtn = document.querySelector("#submitHighScore");
+var submitBtn = document.querySelector(".submit");
+var input = document.querySelector(".input");
+var restartBtn = document.querySelector("#restart-btn");
+var scores = document.querySelector(".scores");
 
 function showCurrentQuestion() {
   // write a function to get the current question index and display that message in the h2
+  endGame();
 
   h2.innerText = questionData[currentQuestionIndex].question;
 
   //write a loop that displays the questions as buttons
   var choices = questionData[currentQuestionIndex].choices;
-  
-  div.innerHTML = "";
+
+  questionDiv.innerHTML = "";
   choices.forEach((choice) => {
     var btn = document.createElement("button");
-    div.appendChild(btn);
+    questionDiv.appendChild(btn);
     btn.innerText = choice;
   });
 
@@ -25,9 +36,23 @@ function showCurrentQuestion() {
   function handleClick(e) {
     if (e.target.innerText !== questionData[currentQuestionIndex].answer) {
       wrongQuestions.push(questionData[currentQuestionIndex].question);
+      time -= 10;
+      var warning = document.createElement("h4");
+      h3.append(warning);
+      warning.innerText = "";
+      warning.style.color = "red";
+      warningInt = 0;
+      warning.innerText = "-10 seconds";
+      warningTimer = setInterval(function () {
+        warningInt++;
+        if (warningInt === 1) {
+          clearInterval(warningTimer);
+          warning.remove();
+          warning.innerText = "";
+        }
+      }, 1000);
     }
     currentQuestionIndex++;
-    console.log(currentQuestionIndex);
     showCurrentQuestion();
   }
 
@@ -37,15 +62,116 @@ function showCurrentQuestion() {
 }
 
 function endGame() {
-  if (currentQuestionIndex > questionData.length) {
-    div.innerHTML = "congrats";
+  if (currentQuestionIndex == questionData.length) {
+    h2.innerHTML = "Congrats";
+    questionDiv.innerHTML = `<p>Congrats! You got ${wrongQuestions.length} out of 10 wrong<br>Here's what you may need to brush up on:</p>`;
+    wrongQuestions.forEach((question) => {
+      var p = document.createElement("p");
+      questionDiv.append(p);
+      p.innerText = question;
+    });
+    showSubmitBtn.classList.toggle("hide");
+    restartBtn.classList.toggle("hide");
+    function submit(e) {
+      var playerData = {
+        name: input.value,
+        score: `${10 - wrongQuestions.length}0%`,
+      };
+
+      var playerArray = getUserData();
+      playerArray.push(playerData);
+
+      saveUserData(playerArray);
+      clearData();
+      //  newScore = document.createElement('p')
+      //  var val = input.value;
+      //  var scoresP = document.querySelectorAll('.scores p');
+
+      //  for (var i = 0; i < scoresP.length; i++) {
+      //    var scoreParagraph = scoresP[i];
+      //    //  John - Score: 5
+      //    var name = scoreParagraph.innerText.split('-')[0].trim().toLowerCase();
+      //    if (name === val.toLowerCase()) {
+      //      scoreParagraph.remove();
+      //    }
+      //  }
+      //   scores.append(newScore)
+      //   val.innerText = ''
+      //   newScore.innerHTML = `${input.value} - Score: ${10 - wrongQuestions.length}0%`
+    }
+    submitBtn.addEventListener("click", submit);
+
+    function restartGame() {
+      currentQuestionIndex = 0;
+      time = 90;
+      startGame();
+      showSubmitBtn.classList.toggle("hide");
+      restartBtn.classList.toggle("hide");
+      wrongQuestions = [];
+      warning.remove();
+    }
+    restartBtn.addEventListener("click", restartGame);
   }
+}
+
+function startClock() {
+  var clock = setInterval(function () {
+    --time;
+    timer.innerText = time;
+    if (time <= 0) {
+      clearInterval(clock);
+      h2.innerText = "Sorry! Times Up!! Please Try Again";
+      questionDiv.innerHTML = "";
+      restartBtn.classList.remove("hide");
+    }
+    if (currentQuestionIndex == questionData.length) {
+      clearInterval(clock);
+    }
+  }, 1000);
+}
+
+function getUserData() {
+  var rawData = localStorage.getItem("users");
+  var parsed = JSON.parse(rawData) || [];
+
+  return parsed;
+}
+
+function saveUserData(arr) {
+  var jsonVal = JSON.stringify(arr);
+
+  localStorage.setItem("users", jsonVal);
+}
+
+function clearData() {
+  input.value = "";
 }
 
 function startGame() {
   startBtn.classList.add("hide");
   showCurrentQuestion();
-  endGame();
+  startClock();
 }
 
 startBtn.addEventListener("click", startGame);
+
+function viewHighScores() {
+  scores.innerHTML = "";
+  overlay.classList.toggle("hide");
+  var players = getUserData();
+
+  for (player of players) {
+    score = document.createElement("p");
+    score.innerText = `${player.name} - Score: ${player.score}`;
+    scores.prepend(score);
+  }
+  console.log(players);
+}
+
+highScores.addEventListener("click", viewHighScores);
+
+function clickToReturn() {
+  overlay.classList.toggle("hide");
+}
+
+returnBtn.addEventListener("click", clickToReturn);

@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -16,9 +19,24 @@
     - -->
 
     <h1>JS Quiz Game</h1>
-    <h2>Sample Question Lorem Ipsum</h2>
+    <p class="mb highscore">Click to view high scores</p>
+    <h3 class="timer">Timer: <span class="timerEl">90</span></h3>
 
-    <div></div>
+    <h2>Click Below to Start the Game!</h2>
+
+    <div class="questiondiv"></div>
+    <div id="overlay" class="hide">
+      <div class="scores"></div>
+      <p class="return">return</p>
+    </div>
+    <div id="submitHighScore" class="hide">
+      <h3>Submit your name below to save your high score!</h3>
+      <p>
+        <input class="input" type="text" />
+        <button class="submit">Submit</button>
+      </p>
+    </div>
+    <button id="restart-btn" class="hide">Restart the Game!</button>
 
     <button id="start-btn" class="">Start the Game!</button>
     <script src="questions.js"></script>
